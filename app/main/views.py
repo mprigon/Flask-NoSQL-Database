@@ -5,10 +5,10 @@ import redis
 from flask import render_template, request, redirect,\
      session, url_for
 
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 
 from . import main
-from .forms import NameForm, HashFieldValueForm, UserUpdateForm
+from .forms import HashFieldValueForm, UserUpdateForm
 from .. import redis
 
 
@@ -27,7 +27,7 @@ def index():
 
     user_agent = request.headers.get('User-Agent')
     # redirect позволяет избежать повторного
-        # POST запроса, поскольку по умолчанию делает GET запрос
+    # POST запроса, поскольку по умолчанию делает GET запрос
     return render_template('index.html', user_agent=user_agent,
                            username=username, is_authenticated=is_authenticated,
                            secret=os.getenv('SECRET_KEY'))
@@ -43,7 +43,7 @@ def add_user():
     username = session['username']
     is_authenticated = session['is_authenticated']
 
-    if username != 'admin' or is_authenticated != True:
+    if username != 'admin' or is_authenticated is not True:
         return render_template('secret_add.html',
                                username=username, is_authenticated=is_authenticated
                                )
@@ -137,7 +137,7 @@ def update_user(pk):
     username = session['username']
     is_authenticated = session['is_authenticated']
 
-    if username == 'Anonimous' and is_authenticated == False:
+    if username == 'Anonimous' and is_authenticated is False:
         return render_template('secret.html',
                                username=username, is_authenticated=is_authenticated,
                                )
